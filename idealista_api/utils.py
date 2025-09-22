@@ -1,6 +1,8 @@
 import base64
 import requests
 
+from idealista_api.exceptions import AuthenticationException
+
 
 def get_bearer_token(api_key: str, secret: str) -> str:
     """Request a Bearer token for OAuth authentication.
@@ -18,6 +20,11 @@ def get_bearer_token(api_key: str, secret: str) -> str:
             "Content-Type": "application/x-www-form-urlencoded",
         },
     ).json()
+    if "access_token" not in req:
+        raise AuthenticationException(
+            f"Error obtaining bearer token: {req.get('error', 'Unknown error')} - {req.get('error_description', 'No description available')}",
+            response=req,
+        )
     return req["access_token"]
 
 
