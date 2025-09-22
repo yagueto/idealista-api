@@ -1,6 +1,7 @@
 import requests
 from .utils import get_bearer_token
-from .models import Property, Response, Search
+from .models import Response, Search
+from .exceptions import APIException
 
 
 time_format = "%Y-%m-%d %H:%M:%S"
@@ -54,7 +55,9 @@ class Idealista:
         print(response_dict)
         if response.status_code != 200:
             # TODO: error in query does not always return an "error" key in the json. Sometimes it returns just a {"message": "..."} (i.e. when the query contains an invalid value)
-            raise Exception(
-                f"Error querying API: {response_dict.get('error', 'Unknown error')} - {response_dict.get('error_description', 'No description available')}"
+            error_description = response_dict.get("error_description") or response_dict.get("message") or "No description available"
+            raise APIException(
+                f"Error querying API: {response_dict.get('error', 'Unknown error')} - {error_description}",
+                response=response_dict
             )
         return Response(response_dict)
