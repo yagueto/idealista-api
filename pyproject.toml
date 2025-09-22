@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "idealista_api"
+version = "1.0.0"
+authors = [
+  { name="yagueto", email="yagofreirefdez@gmail.com" },
+]
+description = "Unofficial Python client for the Idealista API"
+keywords = ["idealista", "property-search", "api"]
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "requests~=2.32.3"
+]
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/yagueto/idealista-api"
+Issues = "https://github.com/yagueto/idealista-api/issues"
+
+[tool.setuptools]
+packages = ["idealista_api"]
