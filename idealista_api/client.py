@@ -1,6 +1,6 @@
 import requests
 from .utils import get_bearer_token
-from .models import Property
+from .models import Property, Response, Search
 
 
 time_format = "%Y-%m-%d %H:%M:%S"
@@ -11,7 +11,12 @@ class Idealista:
 
     session: requests.Session
 
-    def __init__(self, api_key: str | None = None, api_secret: str | None = None, token: str | None = None):
+    def __init__(
+        self,
+        api_key: str | None = None,
+        api_secret: str | None = None,
+        token: str | None = None,
+    ):
         if token is not None:
             self.token = token
         elif api_key is not None and api_secret is not None:
@@ -31,18 +36,25 @@ class Idealista:
             }
         )
 
-    def query(self, request: dict) -> list[Property]:
+    def query(self, request: Search) -> Response:
         """
         Realiza una consulta a la API de Idealista.
 
         Args:
-            request (dict): Datos de la solicitud. Los parámetros deben ser los especificados en la documentación de la API.
+            request (Search): Datos de la solicitud. Los parámetros deben ser los especificados en la documentación de la API.
 
         Returns:
             list[Property]: Lista de propiedades devueltas por la API.
         """
         response = self.session.post(
             "https://api.idealista.com/3.5/es/search",
-            data=request,
+            data=request.to_json(),
         )
-        return [Property(raw_data) for raw_data in response.json().get("elementList", [])]
+        response_dict = response.json()
+        print(response_dict)
+        if response.status_code != 200:
+            # TODO: error in query does not always return an "error" key in the json. Sometimes it returns just a {"message": "..."} (i.e. when the query contains an invalid value)
+            raise Exception(
+                f"Error querying API: {response_dict.get('error', 'Unknown error')} - {response_dict.get('error_description', 'No description available')}"
+            )
+        return Response(response_dict)
