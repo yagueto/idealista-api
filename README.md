@@ -78,7 +78,8 @@ print(ans)
 > Response(page=2, items_per_page=50, total=79, total_pages=2, element_list=[...])
 ```
 
-> [!TIP] For more information on the Search and Response objects, please refer to the [documentation](./docs).
+> [!TIP]
+> For more information on the Search and Response objects, please refer to the [documentation](./docs).
 
 ## Contributing
 
