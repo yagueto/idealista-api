@@ -9,7 +9,8 @@ To create an instance of the `Idealista` client, you need to provide either:
 - An API key and secret (to generate a bearer token), or
 - A pre-generated bearer token.
 
-> [!CAUTION] Ensure that your API key and secret are kept secure and not hard-coded in your source code!
+> [!CAUTION]
+> Ensure that your API key and secret are kept secure and not hard-coded in your source code!
 
 ### Constructor Parameters
 
