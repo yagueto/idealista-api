@@ -3,3 +3,4 @@ env/
 .idea/
 /config.ini
 *.egg-info/
+.vscode/

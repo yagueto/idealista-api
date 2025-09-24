@@ -37,9 +37,8 @@ class Search:
                 data[key] = getattr(self, element)
         if self.custom_filters:
             data.update(self.custom_filters)
-            del data["custom_filters"]
-        # Remove None values
-        return {k: v for k, v in data.items() if v is not None}
+        # Remove None values and exclude 'custom_filters' key
+        return {k: v for k, v in data.items() if v is not None and k != "custom_filters"}
 
 
 class Property:

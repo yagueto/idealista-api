@@ -1,70 +1,89 @@
 # Idealista API Client
 
-Este repositorio contiene un wrapper para la API de Idealista, que permite realizar consultas sobre propiedades en venta o alquiler.
-Los datos son extraídos de la API oficial de idealista (https://developers.idealista.com/).
+![License](https://img.shields.io/github/license/yagueto/idealista-api)
 
-## Requisitos
+Unofficial Python client for the Idealista API, providing access to real estate data, including property listings, pricing, and location details. 
 
-- Cuenta de desarrollador en Idealista (se puede obtener acceso a la API en https://developers.idealista.com/)
-- Python 3.7 o superior
-- Paquetes listados en `requirements.txt`
+Data is retrieved from the official Idealista API (https://developers.idealista.com/).
 
-## Instalación
+## Table of Contents
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-1. Clona el repositorio:
-    ```sh
-    git clone https://github.com/yagueto/idealista-api.git
-    cd idealista-api
-    ```
+## Requirements
 
-2. Crea un entorno virtual y activa el entorno:
-    ```sh
-    python -m venv env
-    source env/bin/activate
-    ```
+- Developer account on Idealista (you can get API access at https://developers.idealista.com/)
+- Python 3.9 or higher
+- Packages listed in `requirements.txt`
 
-3. Instala las dependencias:
-    ```sh
-    pip install -r requirements.txt
-    ```
+## Installation
 
-## Configuración
+1. Clone the repository:
 
-Para hacer consultas, es necesario tener un archivo `config.ini` en el que guardar la clave de la API y el secreto (proporcionados por Idealista al obtener acceso)
+   ```sh
+   git clone https://github.com/yagueto/idealista-api.git
+   cd idealista-api
+   ```
 
-```ini
-[AUTH]
-api_key = tu_api_key
-secret = tu_secret
-```
+2. Create a virtual environment and activate it:
 
-## Uso
+   ```sh
+   python -m venv env
+   source env/bin/activate
+   ```
 
-Los parámetros de las queries son los especificados en la documentación de la API, pasados como diccionario de clave-valor.
+3. Install the library:
+   ```sh
+   pip install .
+   ```
 
-### Ejemplo de uso
+## Usage
+
+To make queries, you need to have an API key and its secret (provided by Idealista when requesting access to their API).
+
+The parameters for the queries are those specified in the API documentation, passed through a Search object.
+
+### Example usage
 
 ```python
-from pprint import pprint
-from idealista_client import Idealista
+from idealista_api import Idealista, Search
 
-idealista = Idealista("config.ini")
+API_KEY = os.getenv("IDEALISTA_API_KEY")
+API_SECRET = os.getenv("IDEALISTA_API_SECRET")
 
-request = {
-    "locationId": "0-EU-ES-01",
-    "propertyType": "storageRooms",
-    "operation": "sale",
-    "maxItems": 50
-}
+idealista = Idealista(
+    api_key=API_KEY, api_secret=API_SECRET
+)
 
-resultado = idealista.query(request)
-pprint(resultado)
+request = Search(
+    "es",
+    location_id="0-EU-ES-01", # Idealista internal location ID
+    property_type="homes",
+    operation="sale",
+    max_items=50,
+    num_page=2
+)
+
+ans = idealista.query(request)
 ```
 
-## Contribuciones
+This returns a Response object, which provides the API response, including the number of returned elements, pagination information, and a list of elements.
 
-¡Las contribuciones son bienvenidas! Para cualquier duda o sugerencia, abre un issue / pull request.
+```
+print(ans)
 
-## Licencia
+> Response(page=2, items_per_page=50, total=79, total_pages=2, element_list=[...])
+```
 
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+> [!TIP] For more information on the Search and Response objects, please refer to the [documentation](./docs).
+
+## Contributing
+
+Contributions are welcome! For any questions or suggestions, please open an issue / pull request.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.

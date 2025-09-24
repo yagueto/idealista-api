@@ -39,22 +39,20 @@ class Idealista:
 
     def query(self, request: Search) -> Response:
         """
-        Realiza una consulta a la API de Idealista.
+        Makes a query to Idealista's API.
 
         Args:
-            request (Search): Datos de la solicitud. Los parámetros deben ser los especificados en la documentación de la API.
+            request (Search): Request data, using parameters specified by the API documentation.
 
         Returns:
-            list[Property]: Lista de propiedades devueltas por la API.
+            list[Property]: List of properties returned by the API.
         """
         response = self.session.post(
             "https://api.idealista.com/3.5/es/search",
             data=request.to_json(),
         )
         response_dict = response.json()
-        print(response_dict)
         if response.status_code != 200:
-            # TODO: error in query does not always return an "error" key in the json. Sometimes it returns just a {"message": "..."} (i.e. when the query contains an invalid value)
             error_description = response_dict.get("error_description") or response_dict.get("message") or "No description available"
             raise APIException(
                 f"Error querying API: {response_dict.get('error', 'Unknown error')} - {error_description}",
